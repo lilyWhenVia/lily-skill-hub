@@ -1,61 +1,124 @@
-# /confluence - Confluence 页面读取
+# /confluence - Confluence 页面读写
 
-读取并解析 Confluence 页面内容。
+读取和写入 Confluence 页面内容。
 
 ## 功能
 
 - 从 Confluence URL 中提取 pageId
-- 调用 Confluence API 获取页面内容
-- 解析并展示页面信息
+- 读取页面内容和元信息
+- 写入/更新页面内容
+- 自动处理版本号
 
 ## 使用方法
 
-直接提供 Confluence 页面 URL：
+### 读取页面
 
 ```
-/confluence https://pmo.mcd.com.cn/confluence/pages/viewpage.action?pageId=261470646
+/confluence 读取 https://pmo.mcd.com.cn/confluence/pages/viewpage.action?pageId=261470646
 ```
 
-或者直接说：
-
+或直接说：
 ```
 读取这个 confluence 页面 <URL>
 ```
 
+### 写入页面
+
+```
+/confluence 写入 <pageId> 在末尾添加：## 新章节内容
+```
+
+或直接说：
+```
+更新这个 confluence 页面，添加一段关于 XXX 的内容
+```
+
 ## 触发条件
 
-以下输入会触发此 skill：
+| 关键词 | 操作 |
+|--------|------|
+| 读取 confluence / 读取这个页面 | 读取 |
+| 写入 confluence / 更新 confluence | 写入 |
+| 包含 `pmo.mcd.com.cn/confluence` URL | 读取 |
 
-- "读取 confluence" 或 "读取confluence"
-- " confluence URL
-- 包含 `pmo.mcd.com.cn/confluence` 的 URL
+## 读取流程
+
+```
+┌─────────────────────────────────────┐
+│  1. 提取 pageId                      │
+│     从 URL 参数 pageId=xxx 提取      │
+└──────────────┬──────────────────────┘
+               ▼
+┌─────────────────────────────────────┐
+│  2. 调用读取脚本                     │
+│     confluence-read.sh <pageId>     │
+└──────────────┬──────────────────────┘
+               ▼
+┌─────────────────────────────────────┐
+│  3. 解析并展示                       │
+│     - title: 页面标题                │
+│     - body: 页面内容                 │
+│     - version: 版本号                │
+└─────────────────────────────────────┘
+```
+
+## 写入流程
+
+```
+┌─────────────────────────────────────┐
+│  1. 读取当前页面                     │
+│     获取 version.number             │
+└──────────────┬──────────────────────┘
+               ▼
+┌─────────────────────────────────────┐
+│  2. 确认修改内容                     │
+│     向用户确认要修改的内容           │
+└──────────────┬──────────────────────┘
+               ▼
+┌─────────────────────────────────────┐
+│  3. 生成新内容                       │
+│     转换为 Confluence Storage Format │
+└──────────────┬──────────────────────┘
+               ▼
+┌─────────────────────────────────────┐
+│  4. 调用写入脚本                     │
+│     confluence-write.sh             │
+│     <pageId> <title> <content>      │
+│     <version+1>                     │
+└──────────────┬──────────────────────┘
+               ▼
+┌─────────────────────────────────────┐
+│  5. 返回结果                         │
+│     成功/失败信息                    │
+└─────────────────────────────────────┘
+```
+
+## Confluence Storage Format
+
+Confluence 使用 XHTML 格式存储内容：
+
+| 元素 | 格式 |
+|------|------|
+| 段落 | `<p>文本</p>` |
+| 标题 | `<h1>` ~ `<h6>` |
+| 无序列表 | `<ul><li>项目</li></ul>` |
+| 有序列表 | `<ol><li>项目</li></ol>` |
+| 表格 | `<table><tr><td>单元格</td></tr></table>` |
+| 代码块 | `<ac:structured-macro ac:name="code">...</ac:structured-macro>` |
+| 链接 | `<a href="url">文本</a>` |
 
 ## 前置要求
 
-需要配置 Confluence 访问脚本：
+需要配置脚本：
 
 ```bash
-~/.claude/scripts/confluence-read.sh
+~/.claude/scripts/confluence-read.sh   # 读取脚本
+~/.claude/scripts/confluence-write.sh  # 写入脚本
 ```
 
-## 输出内容
+## 注意事项
 
-返回 JSON 格式的页面信息：
-
-| 字段 | 说明 |
-|------|------|
-| `title` | 页面标题 |
-| `body.storage.value` | 页面 HTML 内容 |
-
-## 示例
-
-输入：
-```
-读取这个页面 https://pmo.mcd.com.cn/confluence/pages/viewpage.action?pageId=261470646
-```
-
-输出：
-```
-页面标题: XXX 技术方案
-页面内容: ...
-```
+- 写入前必须先读取获取最新版本号
+- 版本号冲突会导致写入失败
+- 写入会覆盖整个页面，确保内容完整
+- 建议写入前确认用户意图
