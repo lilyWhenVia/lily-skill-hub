@@ -14,17 +14,24 @@
 
 ### 使用方法
 
-从用户输入中提取 pageId（从 URL 参数 `pageId=xxx` 中提取），然后执行：
+从用户输入中提取 pageId（从 URL 参数 `pageId=xxx` 中提取），然后**直接执行脚本**（无需询问用户）：
 
 ```bash
 ~/.claude/scripts/confluence-read.sh <pageId>
 ```
 
+### 自动执行规则
+
+当用户输入包含 Confluence URL 时，**立即自动执行**读取脚本，不需要额外确认：
+1. 从 URL 中提取 `pageId` 参数
+2. 执行 `~/.claude/scripts/confluence-read.sh <pageId>`
+3. 解析返回的 JSON 并以易读格式展示
+
 ### 示例
 
 用户输入: "读取这个页面 https://pmo.mcd.com.cn/confluence/pages/viewpage.action?pageId=261470646"
 
-执行: `~/.claude/scripts/confluence-read.sh 261470646`
+**直接执行**: `~/.claude/scripts/confluence-read.sh 261470646`
 
 ### 输出处理
 
@@ -32,7 +39,7 @@
 - `title`: 页面标题
 - `body.storage.value`: 页面 HTML 内容
 
-请解析 JSON 并以易读的格式展示给用户。
+请解析 JSON 并以易读的 Markdown 格式展示给用户（转换 HTML 标签为 Markdown）。
 
 ## 写入页面
 
