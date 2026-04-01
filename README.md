@@ -15,7 +15,7 @@ git clone https://github.com/lilyWhenVia/lily-skill-hub.git ~/.claude/commands
 | Skill | 命令 | 说明 |
 |-------|------|------|
 | [SIT 部署](./docs/sit.md) | `/sit` | 自动提交代码并合并到 SIT 环境 |
-| [Confluence 读取](./docs/confluence.md) | `/confluence` | 读取 Confluence 页面内容 |
+| [Confluence 读写](./docs/confluence.md) | `/confluence` | 读写 Confluence 页面（[安装指南](./docs/confluence-setup.md)） |
 
 ## 使用方法
 
