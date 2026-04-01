@@ -18,10 +18,31 @@ chmod +x ~/.claude/scripts/*.sh
 
 ## 可用 Skills
 
+### 自建 Skills
+
 | Skill | 命令 | 说明 |
 |-------|------|------|
 | [SIT 部署](./docs/sit.md) | `/sit` | 自动提交代码并合并到 SIT 环境 |
 | [Confluence 读写](./docs/confluence.md) | `/confluence` | 读写 Confluence 页面（[安装指南](./docs/confluence-setup.md)） |
+
+### 推荐的第三方 Skills
+
+以下是精选的优质第三方 Skills，安装到 `~/.claude/skills/` 目录：
+
+| Skill | 说明 | 安装命令 |
+|-------|------|----------|
+| [resume-optimization-pro](https://github.com/taielab/resume-optimization-pro) | 8维度评分、迭代优化、面试准备 | `git clone https://github.com/taielab/resume-optimization-pro.git ~/.claude/skills/resume-optimization-pro` |
+| [ResumeSkills](https://github.com/Paramchoudhary/ResumeSkills) | ATS优化、求职策略、职业发展 | `git clone https://github.com/Paramchoudhary/ResumeSkills.git ~/.claude/skills/ResumeSkills` |
+| [resume-tailoring-skill](https://github.com/varunr89/resume-tailoring-skill) | 针对职位定制简历 | `git clone https://github.com/varunr89/resume-tailoring-skill.git ~/.claude/skills/resume-tailoring-skill` |
+
+**一键安装所有简历相关 Skills：**
+
+```bash
+mkdir -p ~/.claude/skills && cd ~/.claude/skills && \
+git clone https://github.com/taielab/resume-optimization-pro.git && \
+git clone https://github.com/Paramchoudhary/ResumeSkills.git && \
+git clone https://github.com/varunr89/resume-tailoring-skill.git
+```
 
 ## 使用方法
 
