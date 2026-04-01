@@ -2,12 +2,18 @@
 
 自定义 Claude Code Skills 仓库，适用于各类 AI Agent。
 
-## 安装
+## 一键安装
 
-将此仓库克隆到 `~/.claude/commands/` 目录：
+```bash
+curl -fsSL https://raw.githubusercontent.com/lilyWhenVia/lily-skill-hub/main/install.sh | bash
+```
+
+或手动安装：
 
 ```bash
 git clone https://github.com/lilyWhenVia/lily-skill-hub.git ~/.claude/commands
+cp ~/.claude/commands/scripts/*.sh ~/.claude/scripts/
+chmod +x ~/.claude/scripts/*.sh
 ```
 
 ## 可用 Skills
