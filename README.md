@@ -24,6 +24,7 @@ chmod +x ~/.claude/scripts/*.sh
 |-------|------|------|
 | [SIT 部署](./docs/sit.md) | `/sit` | 自动提交代码并合并到 SIT 环境 |
 | [Confluence 读写](./docs/confluence.md) | `/confluence` | 读写 Confluence 页面（[安装指南](./docs/confluence-setup.md)） |
+| [智能目录整理](./org/skill.md) | `/org` | 自主整理目录结构，生成 AI 可读的 .repomap 文件 |
 
 ### 推荐的第三方 Skills
 
